@@ -32,11 +32,22 @@ public class InventoryController {
     public List<InventoryDomain> listar() {
         return listUseCase.ejecutar();
     }
+    // Obtener un producto por su ID
+@GetMapping("/{id_product}")
+public ResponseEntity<InventoryDomain> obtenerProductoPorId(@PathVariable Long id_product) {
+    List<InventoryDomain> productos = listUseCase.ejecutar();
+    return productos.stream()
+            .filter(p -> p.getId_product().equals(id_product))
+            .findFirst()
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
+}
 //Crear producto
     @PostMapping
     public void crearUsuario(@RequestBody InventoryDomain  inventory) {
         addUseCase.ejecutar( inventory);
     }
+
 
     // Endpoint raíz
     @GetMapping("/")
